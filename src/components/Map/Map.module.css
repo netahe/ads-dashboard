@@ -1,0 +1,11 @@
+.map {
+    background-image: url('../../assets/got-map.png');
+    width: 1280px;
+    height: 1877px;
+    position: absolute;
+    left: 500px;
+}
+
+.ad {
+    transform: scale(0.25);
+}

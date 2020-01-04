@@ -1,0 +1,1 @@
+export const notImplemented = () => fail('Not Implemented');
