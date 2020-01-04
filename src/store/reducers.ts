@@ -19,6 +19,8 @@ import { Reducer } from "redux";
 const isAdInRange = (ad: IAd, start: number, end: number) =>
   ad.time >= new Date(start) && ad.time <= new Date(end);
 
+const noFilter = (start: number, end: number) => isNaN(start) || isNaN(end);
+
 export const filterReducer = (
   filter: AdsFilter = { start: -1, end: -1 },
   action: AdsDashboardAction
@@ -41,8 +43,7 @@ export const filteredAdsReducer = (
     case RECEIVE_AD:
       return {
         ids:
-          isNaN(filter.start) ||
-          isNaN(filter.end) ||
+          noFilter(filter.start, filter.end) ||
           isAdInRange(action.ad, filter.start, filter.end)
             ? [action.id].concat(ids)
             : ids,
@@ -95,8 +96,10 @@ export const adsReducer: Reducer<AdsDashboardState, AdsDashboardAction> = (
         all,
         filtered: {
           ids: Object.entries(byId)
-            .filter(([_, ad]) =>
-              isAdInRange(ad, filtered.filter.start, filtered.filter.end)
+            .filter(
+              ([_, ad]) =>
+                noFilter(filtered.filter.start, filtered.filter.end) ||
+                isAdInRange(ad, filtered.filter.start, filtered.filter.end)
             )
             .map(([id, _]) => id),
           filter: filtered.filter
